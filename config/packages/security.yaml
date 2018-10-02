@@ -8,6 +8,15 @@ security:
             security: false
         main:
             anonymous: true
+            oauth:
+                resource_owners:
+                    battle_net: /login/check-battle-net
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider
 
             # activate different ways to authenticate
 
@@ -22,3 +31,4 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
