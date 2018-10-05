@@ -1,0 +1,10 @@
+version: "3.1"
+services:
+    proxy:
+      image: nginx:stable
+      container_name: local-nginx-proxy
+      ports:
+        - "80:80"
+      volumes:
+        - ./conf:/etc/nginx/conf.d
+        - ./ssl:/etc/nginx/ssl
