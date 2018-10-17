@@ -15,13 +15,15 @@ hwi_oauth:
     resource_owners:
         battle_net:
             type:                oauth2
-            client_id:           '$env(MASHERY_KEY)'
-            client_secret:       '$env(MASHERY_SECRET)'
+            client_id:           '%env(BNET_CLIENT_ID)%'
+            client_secret:       '%env(BNET_CLIENT_SECRET)%'
             access_token_url:    'https://eu.battle.net/oauth/token'
             authorization_url:   'https://eu.battle.net/oauth/authorize'
             infos_url:           'https://eu.api.battle.net/account/user/id'
-            scope:               "wow.id"
+            scope:               "wow.profile"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            options:
+                use_bearer_authorization: false
             paths:
                 identifier: id
                 nickname:   username
