@@ -19,7 +19,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migraticons,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -27,16 +27,10 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    App\Manager\:
+        resource: '../src/Manager'
+        public: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    my.oauth_aware.user_provider.service:
-        class: HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider
-        arguments:
-        - '@fos_user.user_manager'
-        - ['pass properties as array']
-
-    bnet.oauth.user_provider:
-        class: App\Security\Core\User\OauthUserProvider
-        arguments:
-            - '@doctrine.orm.entity_manager'

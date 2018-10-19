@@ -1,17 +1,25 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kuben
- * Date: 18/10/2018
- * Time: 23:49
- */
 
 namespace App\Repository;
 
-
+use App\Entity\BnetOAuthUser;
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * BnetOAuthUserRepository
+ *
+ * @method BnetOAuthUser|object|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BnetOAuthUser[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BnetOAuthUser find($id, $lockMode = null, $lockVersion = null)
+ */
 class BnetOauthUserRepository extends EntityRepository
 {
-
+    /**
+     * @param $bnetId
+     * @return BnetOAuthUser|null|object
+     */
+    public function findOneByBnetId($bnetId)
+    {
+        return $this->findOneBy(['bnet_id' => $bnetId]);
+    }
 }

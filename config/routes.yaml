@@ -4,3 +4,6 @@
 
 battle_net_login:
   path: /login/check-battle-net
+
+logout:
+    path: /logout

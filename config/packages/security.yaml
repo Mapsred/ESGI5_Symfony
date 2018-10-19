@@ -3,7 +3,7 @@ security:
     providers:
         #in_memory: { memory: ~ }
         hwi:
-            id: hwi_oauth.user.provider
+            id: App\Security\Core\User\OauthUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -18,7 +18,11 @@ security:
                 failure_path:      /login
 
                 oauth_user_provider:
-                    service: bnet.oauth.user_provider
+                    service: App\Security\Core\User\OauthUserProvider
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
 
             # activate different ways to authenticate
 

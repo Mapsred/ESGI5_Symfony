@@ -1,62 +1,72 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kuben
- * Date: 18/10/2018
- * Time: 22:07
- */
 
 namespace App\Security\Core\User;
 
-use App\Entity\BnetOauthUser;
-use Doctrine\Common\Persistence\ObjectManager;
+use App\Entity\BnetOAuthUser;
+use App\Manager\BnetOAuthUserManager;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider as BaseOauthUserProvider;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class OauthUserProvider
+ * @package App\Security\Core\User
+ */
 class OauthUserProvider extends BaseOauthUserProvider
 {
+    /** @var BnetOAuthUserManager $bnetOAuthUserManager */
+    private $bnetOAuthUserManager;
 
     /**
-     * @var ObjectManager manager
+     * OauthUserProvider constructor.
+     * @param BnetOAuthUserManager $bnetOAuthUserManager
      */
-    private $manager;
-
-
-    public function __construct(ObjectManager $manager)
+    public function __construct(BnetOAuthUserManager $bnetOAuthUserManager)
     {
-        $this->manager = $manager;
-    }
-
-    private function generateBnetOauthUser(UserResponseInterface $response)
-    {
-        dump($response->getAccessToken());
-        dump($response->getExpiresIn());
-
-        dd($response);
-        $data = $response->getData();
-
-        $user = new BnetOauthUser();
-        $user->setBnetId($data['id']);
-        $user->setBnetSub($data['sub']);
-        $user->setBnetBattletag($data['battletag']);
-        $user->setBnetAccessToken($response->getAccessToken());
-        $user->setBnetAccessExpiresIn($response->getExpiresIn());
-
+        $this->bnetOAuthUserManager = $bnetOAuthUserManager;
     }
 
     /**
      * @param UserResponseInterface $response
-     *
+     * @return BnetOAuthUser|null|object
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
+        $bnetOAuthUser = $this->bnetOAuthUserManager->findOrCreateUser($response);
 
-        if( null === $bnetOauthUser = $this->manager->getRepository("App:BnetOauthUser")->findOneBy(['bnet_id' => $response->getUsername()])){
-            $bnetOauthUser = $this->generateBnetOauthUser($response);
-
-        }
-
-        dd($response);
+        return $this->bnetOAuthUserManager->updateFromUserResponse($bnetOAuthUser, $response);
     }
 
+    /**
+     * @param string $username
+     * @return BnetOAuthUser
+     */
+    public function loadUserByUsername($username)
+    {
+        return $this->bnetOAuthUserManager->getRepository()->findOneByBnetId($username);
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return BnetOAuthUser|UserInterface
+     * @throws UnsupportedUserException
+     */
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$this->supportsClass(get_class($user))) {
+            throw new UnsupportedUserException(sprintf('Unsupported user class "%s"', get_class($user)));
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param string $class
+     * @return bool
+     */
+    public function supportsClass($class)
+    {
+        return BnetOAuthUser::class === $class;
+    }
 }

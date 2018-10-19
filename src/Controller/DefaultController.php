@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class DefaultController
+ * @package App\Controller
+ */
 class DefaultController extends AbstractController
 {
     /**
@@ -13,8 +17,6 @@ class DefaultController extends AbstractController
      */
     public function index(Request $request)
     {
-        dump($request->headers->all());
-        dd($request->server->all());
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
         ]);
