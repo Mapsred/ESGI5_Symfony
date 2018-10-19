@@ -19,7 +19,7 @@ hwi_oauth:
             client_secret:       '%env(BNET_CLIENT_SECRET)%'
             access_token_url:    'https://eu.battle.net/oauth/token'
             authorization_url:   'https://eu.battle.net/oauth/authorize'
-            infos_url:           'https://eu.api.battle.net/account/user/id'
+            infos_url:           'https://eu.battle.net/oauth/userinfo'
             scope:               "wow.profile"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             options:

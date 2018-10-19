@@ -1,7 +1,9 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        #in_memory: { memory: ~ }
+        hwi:
+            id: hwi_oauth.user.provider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,7 +18,7 @@ security:
                 failure_path:      /login
 
                 oauth_user_provider:
-                    service: hwi_oauth.user.provider
+                    service: bnet.oauth.user_provider
 
             # activate different ways to authenticate
 
@@ -31,4 +33,4 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
