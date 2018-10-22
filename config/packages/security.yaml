@@ -1,13 +1,28 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        #in_memory: { memory: ~ }
+        hwi:
+            id: App\Security\Core\User\OauthUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: true
+            oauth:
+                resource_owners:
+                    battle_net: /login/check-battle-net
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: App\Security\Core\User\OauthUserProvider
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
 
             # activate different ways to authenticate
 
@@ -22,3 +37,4 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
