@@ -31,6 +31,12 @@ services:
         resource: '../src/Manager'
         public: true
 
+    App\Utils\BattleNetSDK:
+        arguments:
+            $client_id: '%env(BNET_CLIENT_ID)%'
+            $client_secret: '%env(BNET_CLIENT_SECRET)%'
+            $kernelCacheDir: '%kernel.cache_dir%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
