@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -12,6 +12,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 class Objective
 {
     use ORMBehaviors\Timestampable\Timestampable;
+    use ORMBehaviors\SoftDeletable\SoftDeletable;
 
     /**
      * @ORM\Id()
@@ -40,74 +41,59 @@ class Objective
      */
     private $achievement_id;
 
-    /**
-     * @ORM\Column(name="deleted_at", type="datetime")
-     */
-    private $deleted_at;
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getBnetId()
+    public function getBnetId(): ?int
     {
         return $this->bnet_id;
     }
 
-    public function setBnetId($bnet_id)
+    public function setBnetId(int $bnet_id): self
     {
         $this->bnet_id = $bnet_id;
         return $this;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
         return $this;
     }
 
-    public function getEndingDate()
+    public function getEndingDate(): ?\DateTime
     {
         return $this->ending_date;
     }
 
-    public function setEndingDate($ending_date)
+    public function setEndingDate(\DateTime $ending_date): self
     {
         $this->ending_date = $ending_date;
         return $this;
     }
 
-    public function getAchievementId()
+    public function getAchievementId(): ?int
     {
         return $this->achievement_id;
     }
 
-    public function setAchievementId($achievement_id)
+    public function setAchievementId(int $achievement_id): self
     {
         $this->achievement_id = $achievement_id;
-        return $this;
-    }
-
-    public function getDeletedAt()
-    {
-        return $this->deleted_at;
-    }
-
-    public function setDeletedAt($deleted_at)
-    {
-        $this->deleted_at = $deleted_at;
         return $this;
     }
 }
