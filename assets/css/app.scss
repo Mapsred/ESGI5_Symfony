@@ -8,13 +8,6 @@ body > .container {
   padding-top: 60px;
 }
 
-body {
-  header {
-    display: inline-block;
-  }
-}
-
-
 .select2-container--bootstrap {
   .select2-selection--single {
     .select2-selection__rendered {
@@ -26,4 +19,13 @@ body {
     height: 38px;
 
   }
+
+  .bg1 {
+    background-image: url('../img/bg1.jpg');
+  }
+}
+
+
+.bg-battle-pet-horde {
+  background-image: url('../img/battle-pet-horde.jpg');
 }

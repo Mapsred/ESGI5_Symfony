@@ -2,6 +2,16 @@
 
 {% block title %}Hello {{ controller_name }}!{% endblock %}
 
+
+{% block body %}
+    {{ include('parts/page_header.html.twig', {
+        'img_class': 'bg-battle-pet-horde',
+        'title': 'WowCollection'
+    }) }}
+
+    {{ parent() }}
+{% endblock %}
+
 {% block subbody %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
