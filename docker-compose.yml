@@ -23,7 +23,7 @@ services:
           - ./engine/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
           - ./engine/reverse_proxy/ssl:/etc/nginx/ssl
       ports:
-       - "8061:443"
+       - "8061:80"
 
     php-fpm:
       build:
