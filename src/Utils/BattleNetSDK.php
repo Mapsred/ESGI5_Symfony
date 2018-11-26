@@ -40,6 +40,7 @@ class BattleNetSDK
         $this->client = new Client([
             'base_uri' => 'https://eu.api.blizzard.com/',
             'timeout' => 10,
+            'verify' => false, //Ignore SSL Errors
         ]);
 
         $this->client_id = $client_id;
