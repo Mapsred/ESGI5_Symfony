@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Form\RealmPlayerType;
 use App\Utils\BattleNetHelper;
-use App\Utils\BattleNetSDK;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,13 +17,13 @@ class DashboardController extends AbstractController
     /**
      * @Route("/", name="dashboard_index")
      * @param Request $request
-     * @param BattleNetSDK $battleNetSDK
+     * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
-    public function index(Request $request, BattleNetSDK $battleNetSDK)
+    public function index(Request $request, BattleNetHelper $battleNetHelper)
     {
         $form = $this->createForm(RealmPlayerType::class, null, [
-            'realms' => $battleNetSDK->getRealms()
+            'realms' => $battleNetHelper->getRealms()
         ]);
 
         $form->handleRequest($request);

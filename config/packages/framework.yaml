@@ -15,6 +15,9 @@ framework:
         log: true
 
     cache:
+        pools:
+            cache.battle_net:
+                default_lifetime: 3600
         # Put the unique name of your app here: the prefix seed
         # is used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name

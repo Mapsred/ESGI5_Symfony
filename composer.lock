@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19a38ac5f98ad42e8f206f2ba7431436",
+    "content-hash": "5632875df82db1650494624b3f77184e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1270,6 +1270,73 @@
                 "reflection"
             ],
             "time": "2018-06-14T14:45:07+00:00"
+        },
+        {
+            "name": "e-moe/guzzle6-bundle",
+            "version": "v1.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/e-moe/guzzle6-bundle.git",
+                "reference": "ab12fa3077e88bcb4a89cc36b8fc74b6b2cf07e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/e-moe/guzzle6-bundle/zipball/ab12fa3077e88bcb4a89cc36b8fc74b6b2cf07e8",
+                "reference": "ab12fa3077e88bcb4a89cc36b8fc74b6b2cf07e8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "php": ">=5.6",
+                "symfony/framework-bundle": "^2.7|^3.0|^4.0",
+                "symfony/stopwatch": "^2.7|^3.0|^4.0"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.3",
+                "phpunit/phpunit": "^5.1",
+                "satooshi/php-coveralls": "^2.0",
+                "sebastian/phpcpd": "^2.0",
+                "squizlabs/php_codesniffer": "^2.5",
+                "symfony/monolog-bundle": "^2.7"
+            },
+            "suggest": {
+                "symfony/monolog-bundle": "Log requests"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Emoe\\GuzzleBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolay Labinskiy aka e-moe",
+                    "email": "e-moe@ukr.net"
+                }
+            ],
+            "description": "Integrates Guzzle 6 into your Symfony application",
+            "homepage": "https://github.com/e-moe/guzzle6-bundle",
+            "keywords": [
+                "Guzzle",
+                "api",
+                "bundle",
+                "client",
+                "curl",
+                "http",
+                "http client",
+                "rest",
+                "web service"
+            ],
+            "time": "2018-03-02T12:12:20+00:00"
         },
         {
             "name": "egulias/email-validator",
