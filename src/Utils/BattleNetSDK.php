@@ -139,7 +139,25 @@ class BattleNetSDK
             ]);
 
             return $this->getJsonContent($response);
-        }, 'realms', self::LONG_TIME);
+        }, 'character_classes', self::LONG_TIME);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCharacterRaces()
+    {
+        return $this->cacheHandle(function () {
+            $response = $this->client->request('GET', '/wow/data/character/races', [
+                'query' => [
+                    'region' => 'eu',
+                    'locale' => 'fr_FR',
+                    'access_token' => $this->getAccessToken()
+                ]
+            ]);
+
+            return $this->getJsonContent($response);
+        }, 'character_races', self::LONG_TIME);
     }
 
     /**

@@ -66,10 +66,15 @@ class BattleNetHelper
     public function formatCharacter(array $character)
     {
         $character['thumbnail'] = sprintf('http://render-eu.worldofwarcraft.com/character/%s', $character['thumbnail']);
-        $classes = $this->getBattleNetSDK()->getCharacterClasses();
 
+        $classes = $this->getBattleNetSDK()->getCharacterClasses();
         if (false !== $key = array_search($character['class'], array_column($classes['classes'], 'id'))) {
             $character['class'] = $classes['classes'][$key];
+        }
+
+        $races = $this->getBattleNetSDK()->getCharacterRaces();
+        if (false !== $key = array_search($character['race'], array_column($races['races'], 'id'))) {
+            $character['race'] = $races['races'][$key];
         }
 
         return $character;
