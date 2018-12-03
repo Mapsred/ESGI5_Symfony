@@ -1,10 +1,26 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ player }} informations{% endblock %}
+
+{% block navbar_class %}
+{% endblock %}
+
 {% block subbody %}
+    {{ dump(profile) }}
+
+    <div class="character-profile-resultat">
+        <img src="{{ profile.thumbnail }}" alt="{{ profile.name }}"
+             class="portrait mage">
+        <div class="informations-personnage">
+            <h2 id="progression-personnage">
+                <img class="guide_classe_icone_classe"
+                     src="{{ asset('build/images/classes/%s.png'|format(profile.class.id)) }}"
+                     alt="mage WoW">
+                {{ profile.name }} ({{ profile.class.name }} {{ profile.level }}) - {{ profile.realm }}
+            </h2>
+
+
+        </div>
+    </div>
 
 {% endblock %}
-
-{% block title %}
-
-{% endblock %}
-
