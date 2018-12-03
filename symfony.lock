@@ -5,6 +5,9 @@
     "clue/stream-filter": {
         "version": "v1.4.0"
     },
+    "cocur/slugify": {
+        "version": "v3.1"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
