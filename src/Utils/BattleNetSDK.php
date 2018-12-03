@@ -40,6 +40,7 @@ class BattleNetSDK
         $this->client = new Client([
             'base_uri' => 'https://eu.api.blizzard.com/',
             'timeout' => 10,
+            'verify' => false, //Ignore SSL Errors
         ]);
 
         $this->client_id = $client_id;
@@ -96,7 +97,7 @@ class BattleNetSDK
      */
     private function generateAccessToken()
     {
-        $response = $this->client->request("POST", "/oauth/token", [
+        $response = $this->client->request("POST", "https://eu.battle.net/oauth/token", [
             'form_params' => ['grant_type' => 'client_credentials'],
             'auth' => [$this->client_id, $this->client_secret]
         ]);
