@@ -1,4 +1,5 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
+const TerserPlugin = require('terser-webpack-plugin');
 
 Encore
     .enableSingleRuntimeChunk()
@@ -24,7 +25,12 @@ Encore
         from: './assets/img/classes',
         to: 'images/classes/[path][name].[ext]'
     })
-;
+
+    .addPlugin(new TerserPlugin({
+        extractComments: true,
+        cache: true,
+        parallel: true
+    }));
 
 
 module.exports = Encore.getWebpackConfig();
