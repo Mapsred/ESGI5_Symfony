@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use GuzzleHttp\Client;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -31,22 +32,18 @@ class BattleNetSDK
      * BattleNetSDK constructor.
      * @param string $client_id
      * @param string $client_secret
-     * @param string $kernelCacheDir
+     * @param CacheItemPoolInterface $cacheManager
+     * @param Client $client
      * @param SessionInterface $session
      */
-    public function __construct(string $client_id, string $client_secret, string $kernelCacheDir,
+    public function __construct(string $client_id, string $client_secret, CacheItemPoolInterface $cacheManager, Client $client,
                                 SessionInterface $session)
     {
-        $this->client = new Client([
-            'base_uri' => 'https://eu.api.blizzard.com/',
-            'timeout' => 10,
-            'verify' => false, //Ignore SSL Errors
-        ]);
-
+        $this->client = $client;
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
         $this->session = $session;
-        $this->cacheManager = new FilesystemAdapter("BattleNetSDK", self::SHORT_TIME, $kernelCacheDir);
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -63,12 +60,7 @@ class BattleNetSDK
                 ]
             ]);
 
-            $content = $this->getJsonContent($response);
-            $realms = $content['realms'];
-            $realms = array_combine(array_column($realms, 'name'), array_column($realms, 'slug'));
-
-            return $realms;
-
+            return $this->getJsonContent($response);
         }, 'realms', self::LONG_TIME);
     }
 
@@ -91,6 +83,82 @@ class BattleNetSDK
         }, sprintf('realm_%s', $slug), self::LONG_TIME);
     }
 
+    /**
+     * @param string $name
+     * @param string $realm
+     * @param string|null $fields
+     * @return array
+     */
+    public function getCharacter(string $name, string $realm, string $fields = null)
+    {
+        return $this->cacheHandle(function () use ($name, $realm, $fields) {
+            $response = $this->client->request('GET', sprintf('/wow/character/%s/%s', $realm, $name), [
+                'query' => [
+                    'region' => 'eu',
+                    'fields' => $fields,
+                    'locale' => 'fr_FR',
+                    'access_token' => $this->getAccessToken()
+                ]
+            ]);
+
+            return $this->getJsonContent($response);
+        }, sprintf('character_%s_%s_%s', $realm, $name, $fields), self::SHORT_TIME);
+    }
+
+    /**
+     * @param string $id
+     * @return mixed
+     */
+    public function getAchievement(string $id)
+    {
+        return $this->cacheHandle(function () use ($id) {
+            $response = $this->client->request('GET', sprintf('/wow/achievement/%s', $id), [
+                'query' => [
+                    'region' => 'eu',
+                    'locale' => 'fr_FR',
+                    'access_token' => $this->getAccessToken()
+                ]
+            ]);
+
+            return $this->getJsonContent($response);
+        }, sprintf('achievement_%s', $id), self::LONG_TIME);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCharacterClasses()
+    {
+        return $this->cacheHandle(function () {
+            $response = $this->client->request('GET', '/wow/data/character/classes', [
+                'query' => [
+                    'region' => 'eu',
+                    'locale' => 'fr_FR',
+                    'access_token' => $this->getAccessToken()
+                ]
+            ]);
+
+            return $this->getJsonContent($response);
+        }, 'character_classes', self::LONG_TIME);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCharacterRaces()
+    {
+        return $this->cacheHandle(function () {
+            $response = $this->client->request('GET', '/wow/data/character/races', [
+                'query' => [
+                    'region' => 'eu',
+                    'locale' => 'fr_FR',
+                    'access_token' => $this->getAccessToken()
+                ]
+            ]);
+
+            return $this->getJsonContent($response);
+        }, 'character_races', self::LONG_TIME);
+    }
 
     /**
      * @return string

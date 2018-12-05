@@ -5,6 +5,9 @@
     "clue/stream-filter": {
         "version": "v1.4.0"
     },
+    "cocur/slugify": {
+        "version": "v3.1"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -70,6 +73,9 @@
     },
     "doctrine/reflection": {
         "version": "v1.0.0"
+    },
+    "e-moe/guzzle6-bundle": {
+        "version": "v1.2.3"
     },
     "easycorp/easy-log-handler": {
         "version": "1.0",

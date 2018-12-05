@@ -18,4 +18,5 @@ return [
     Http\HttplugBundle\HttplugBundle::class => ['all' => true],
     Knp\DoctrineBehaviors\Bundle\DoctrineBehaviorsBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    Emoe\GuzzleBundle\EmoeGuzzleBundle::class => ['all' => true],
 ];

@@ -31,11 +31,18 @@ services:
         resource: '../src/Manager'
         public: true
 
+    GuzzleHttp\Client:
+        arguments:
+            - { base_uri: 'https://eu.api.blizzard.com/', timeout: 30 }
+        tags:
+            - { name: guzzle.client }
+
     App\Utils\BattleNetSDK:
         arguments:
             $client_id: '%env(BNET_CLIENT_ID)%'
             $client_secret: '%env(BNET_CLIENT_SECRET)%'
-            $kernelCacheDir: '%kernel.cache_dir%'
+            $cacheManager: '@cache.battle_net' # See framework.yaml and cache.battle_net pool
+
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
