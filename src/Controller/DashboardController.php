@@ -20,11 +20,9 @@ class DashboardController extends AbstractController
      * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
-    public function index(Request $request, BattleNetHelper $battleNetHelper)
+    public function index(Request $request)
     {
-        $form = $this->createForm(RealmPlayerType::class, null, [
-            'realms' => $battleNetHelper->getRealms()
-        ]);
+        $form = $this->createForm(RealmPlayerType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

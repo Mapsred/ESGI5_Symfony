@@ -20,9 +20,8 @@ class RealmPlayerType extends AbstractType
             ->add('character_name', TextType::class, [
                 'label' => 'Character Name'
             ])
-            ->add('realm', ChoiceType::class, [
+            ->add('realm', RealmType::class, [
                 'label' => 'Realm',
-                'choices' => $options['realms'],
                 'attr' => [
                     'class' => 'select2'
                 ]
