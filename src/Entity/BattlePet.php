@@ -34,7 +34,7 @@ class BattlePet
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $ItemId;
+    private $itemId;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -137,14 +137,14 @@ class BattlePet
         return $this;
     }
 
-    public function getItemId(): ?int
+    public function getitemId(): ?int
     {
-        return $this->ItemId;
+        return $this->itemId;
     }
 
-    public function setItemId(?int $ItemId): self
+    public function setItemId(?int $itemId): self
     {
-        $this->ItemId = $ItemId;
+        $this->itemId = $itemId;
 
         return $this;
     }
