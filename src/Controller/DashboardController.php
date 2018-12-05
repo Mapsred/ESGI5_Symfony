@@ -17,7 +17,6 @@ class DashboardController extends AbstractController
     /**
      * @Route("/", name="dashboard_index")
      * @param Request $request
-     * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
     public function index(Request $request)
