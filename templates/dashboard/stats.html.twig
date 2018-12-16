@@ -7,7 +7,9 @@
 
 {% block subbody %}
     {{ dump(profile) }}
+    {{ dump(items) }}
 
+    <script src="https://wow.zamimg.com/widgets/power.js"></script>
     <div class="character-profile-results">
         <img src="{{ profile.thumbnail }}" alt="{{ profile.name }}"
              class="portrait {{ profile.class.name|slugify }}">
@@ -17,6 +19,56 @@
                 {{ profile.name }} ({{ profile.race.name }} {{ profile.class.name }} {{ profile.level }}) - {{ profile.realm }}
             </h2>
 
+            <div class="gears">
+                {% set gear_order = [
+                    'head',
+                    'neck',
+                    'shoulder',
+                    'back',
+                    'chest',
+                    'wrist',
+                    'hands',
+                    'waist',
+                    'legs',
+                    'feet',
+                    'finger1',
+                    'finger2',
+                    'trinket1',
+                    'trinket2',
+                    'mainHand',
+                    'offHand'
+                ]
+                %}
+
+                {% for item in gear_order %}
+
+                    <div class="gear">
+                        <a href="#" data-wowhead="item={{ items[item].id }}&domain=fr">
+                            <img src="{{ items[item].image.large }}" alt="">
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!--
+            items.head
+            items.neck
+            items.shoulder
+            items.back
+            items.chest
+            items.wrist
+            items.hands
+            items.waist
+            items.legs
+            items.feet
+            items.finger1
+            items.finger2
+            items.trinket1
+            items.trinket2
+            items.mainHand
+            items.offHand
+
+            -->
 
         </div>
     </div>

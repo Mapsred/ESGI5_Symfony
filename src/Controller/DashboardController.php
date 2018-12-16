@@ -57,10 +57,18 @@ class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard_index');
         }
 
+        if (null === $items = $battleNetHelper->findCharacterItems($player,$realm)){
+            $this->addFlash('error', sprintf('The player %s for realm %s does not exists', $player, $realm));
+
+            return $this->redirectToRoute('dashboard_index');
+        }
+
+
         return $this->render('dashboard/stats.html.twig', [
             'realm' => $battleNetHelper->getBattleNetSDK()->getRealm($realm),
             'player' => $player,
-            'profile' => $profile
+            'profile' => $profile,
+            'items' => $items
         ]);
     }
 }

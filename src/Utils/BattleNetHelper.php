@@ -60,6 +60,27 @@ class BattleNetHelper
     }
 
     /**
+     * @param string $player
+     * @param string $realm
+     * @param bool $format
+     * @return array|null
+     */
+    public function findCharacterItems(string $player, string $realm, bool $format = true){
+        try {
+            $contents = $this->getBattleNetSDK()->getCharacter($player, $realm, 'items');
+
+            return $format ? $this->formatCharacterItems($contents)['items'] : $contents['items'];
+        } catch (ClientException $e) {
+            $contents = json_decode($e->getResponse()->getBody()->getContents(), true);
+            if (isset($contents['reason']) && $contents['reason'] === 'Character not found.') {
+                return null;
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
      * @param array $character
      * @return array
      */
@@ -77,6 +98,25 @@ class BattleNetHelper
             $character['race'] = $races['races'][$key];
         }
 
+        return $character;
+    }
+
+    /**
+     * @param array $items
+     * @return array
+     */
+    public function formatCharacterItems(array $character)
+    {
+
+        foreach($character['items'] as $key => $item){
+            if(isset($item['icon'])){
+                $character['items'][$key]['image'] = [
+                  'small' => sprintf('https://wow.zamimg.com/images/wow/icons/small/%s.jpg', $item['icon']),
+                  'medium' => sprintf('https://wow.zamimg.com/images/wow/icons/medium/%s.jpg', $item['icon']),
+                  'large' => sprintf('https://wow.zamimg.com/images/wow/icons/large/%s.jpg', $item['icon'])
+                ];
+            }
+        }
         return $character;
     }
 }
