@@ -36,9 +36,13 @@ class BattleNetSDK
      * @param Client $client
      * @param SessionInterface $session
      */
-    public function __construct(string $client_id, string $client_secret, CacheItemPoolInterface $cacheManager, Client $client,
-                                SessionInterface $session)
-    {
+    public function __construct(
+        string $client_id,
+        string $client_secret,
+        CacheItemPoolInterface $cacheManager,
+        Client $client,
+        SessionInterface $session
+    ) {
         $this->client = $client;
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
@@ -124,6 +128,44 @@ class BattleNetSDK
         }, sprintf('achievement_%s', $id), self::LONG_TIME);
     }
 
+    public function getAchievements(int $factionId): array
+    {
+        return $this->cacheHandle(function () use ($factionId) {
+            $response = $this->client->request('GET', '/wow/data/character/achievements', [
+                'query' => [
+                    'region' => 'eu',
+                    'locale' => 'fr_FR',
+                    'access_token' => $this->getAccessToken()
+                ]
+            ]);
+
+            $content = $this->getJsonContent($response)['achievements'] ?? [];
+
+            $output = [];
+            foreach ($content as $item) {
+                $output[$item['id']] = $item['name'];
+
+                $achievements = $item['achievements'] ?? [];
+
+                $categogiesAchievements = array_column($item['categories'] ?? [], 'achievements');
+
+                foreach ($categogiesAchievements as $categogiesAchievement) {
+                    $achievements = array_merge($achievements, $categogiesAchievement);
+                }
+
+                foreach ($achievements as $achievement) {
+                    if (!in_array($achievement['factionId'], [$factionId, 2])) {
+                        continue;
+                    }
+
+                    $output[$achievement['id']] = $achievement['title'];
+                }
+            };
+
+            return $output;
+        }, 'achievements', self::LONG_TIME);
+    }
+
     /**
      * @return array
      */
@@ -185,7 +227,7 @@ class BattleNetSDK
      */
     private function getAccessToken()
     {
-        if (!$this->session->has('access_token') || $this->session->has('access_token')['expires_at'] >= new \DateTime()) {
+        if (!$this->session->has('access_token') || $this->session->has('access_token')['expires_at'] <= new \DateTime()) {
             return $this->generateAccessToken();
         }
 
