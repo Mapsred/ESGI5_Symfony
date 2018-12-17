@@ -47,7 +47,8 @@ class BattleNetHelper
     {
         try {
             $contents = $this->getBattleNetSDK()->getCharacter($player, $realm);
-
+            $stats = $this->getBattleNetSDK()->getCharacter($player, $realm,'stats');
+            $contents['stats'] = $stats['stats'];
             return $format ? $this->formatCharacter($contents) : $contents;
         } catch (ClientException $e) {
             $contents = json_decode($e->getResponse()->getBody()->getContents(), true);
@@ -87,6 +88,18 @@ class BattleNetHelper
     public function formatCharacter(array $character)
     {
         $character['thumbnail'] = sprintf('http://render-eu.worldofwarcraft.com/character/%s', $character['thumbnail']);
+        $character['main_background'] = str_replace('-avatar','-main',$character['thumbnail']);
+        $image = imagecreatefromjpeg($character['main_background']);
+        $image_size = (object) [
+            'width' => imagesx($image),
+            'height' => imagesy($image)
+        ];
+        $rgb = imagecolorat($image,round($image_size->width/2), $image_size->height - 1);
+        $r = ($rgb >> 16) & 0xFF;
+        $g = ($rgb >> 8) & 0xFF;
+        $b = $rgb & 0xFF;
+
+        $character['main_color'] = (object) ['r' => $r, 'g' => $g, 'b' => $b];
 
         $classes = $this->getBattleNetSDK()->getCharacterClasses();
         if (false !== $key = array_search($character['class'], array_column($classes['classes'], 'id'))) {

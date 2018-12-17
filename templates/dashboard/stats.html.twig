@@ -18,15 +18,16 @@
                 <img class="class_icon" src="{{ asset('build/images/classes/%s.png'|format(profile.class.id)) }}">
                 {{ profile.name }} ({{ profile.race.name }} {{ profile.class.name }} {{ profile.level }}) - {{ profile.realm }}
             </h2>
-
-            <div class="gears">
-                {% set gear_order = [
+            {% set gear_order = {
+                'left' : [
                     'head',
                     'neck',
                     'shoulder',
                     'back',
                     'chest',
                     'wrist',
+                ],
+                'right' : [
                     'hands',
                     'waist',
                     'legs',
@@ -35,41 +36,48 @@
                     'finger2',
                     'trinket1',
                     'trinket2',
+                ],
+                'bottom' : [
                     'mainHand',
                     'offHand'
                 ]
-                %}
+            }
+            %}
 
-                {% for item in gear_order %}
 
-                    <div class="gear">
-                        <a href="#" data-wowhead="item={{ items[item].id }}&domain=fr">
-                            <img src="{{ items[item].image.large }}" alt="">
-                        </a>
-                        <p class="level">{{ items[item].itemLevel }}</p>
+            <div class="stuff">
+
+                <div class="background">
+                    <img id="character-render" src="{{ profile.main_background }}" alt="">
+                </div>
+                {% for key, item_key in gear_order %}
+                    <div class="gears {{ key }}">
+                        {% for item in item_key %}
+                            {% if items[item].icon == 'inv_heartofazeroth' %}
+                            <div class="gear quality-azerite">
+                            {% else %}
+                            <div class="gear quality-{{ items[item].quality }}">
+                            {% endif %}
+                                <div class="item">
+                                    <a href="#" data-wowhead="item={{ items[item].id }}&domain=fr">
+                                        <img  src="{{ items[item].image.large }}" alt="">
+                                    </a>
+                                </div>
+                                <div class="description">
+                                    <p class="name">{{ items[item].name }}</p>
+                                    <p class="level">{{ items[item].itemLevel }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 {% endfor %}
             </div>
 
-            <!--
-            items.head
-            items.neck
-            items.shoulder
-            items.back
-            items.chest
-            items.wrist
-            items.hands
-            items.waist
-            items.legs
-            items.feet
-            items.finger1
-            items.finger2
-            items.trinket1
-            items.trinket2
-            items.mainHand
-            items.offHand
+            <div class="characters-stats" style="background:rgb({{ profile.main_color.r }},{{ profile.main_color.g }},{{ profile.main_color.b }})">
 
-            -->
+            </div>
+
+
 
         </div>
     </div>
