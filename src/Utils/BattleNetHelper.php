@@ -115,7 +115,7 @@ class BattleNetHelper
     }
 
     /**
-     * @param array $items
+     * @param array $character
      * @return array
      */
     public function formatCharacterItems(array $character)
