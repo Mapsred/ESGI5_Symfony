@@ -63,7 +63,6 @@ class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard_index');
         }
 
-
         return $this->render('dashboard/stats.html.twig', [
             'realm' => $battleNetHelper->getBattleNetSDK()->getRealm($realm),
             'player' => $player,
