@@ -2,12 +2,16 @@
 
 {% block title %}{{ player }} informations{% endblock %}
 
+
 {% block navbar_class %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://wow.zamimg.com/widgets/power.js"></script>
 {% endblock %}
 
 {% block subbody %}
 
-    <script src="https://wow.zamimg.com/widgets/power.js"></script>
     <div class="character-profile-results">
         <img src="{{ profile.thumbnail }}" alt="{{ profile.name }}"
              class="portrait {{ profile.class.name|slugify }}">
