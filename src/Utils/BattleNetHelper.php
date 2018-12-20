@@ -49,6 +49,7 @@ class BattleNetHelper
             $contents = $this->getBattleNetSDK()->getCharacter($player, $realm);
             $stats = $this->getBattleNetSDK()->getCharacter($player, $realm,'stats');
             $contents['stats'] = $stats['stats'];
+
             return $format ? $this->formatCharacter($contents) : $contents;
         } catch (ClientException $e) {
             $contents = json_decode($e->getResponse()->getBody()->getContents(), true);
