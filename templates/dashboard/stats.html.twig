@@ -17,30 +17,10 @@
                 {{ profile.name }} ({{ profile.race.name }} {{ profile.class.name }} {{ profile.level }}) - {{ profile.realm }}
             </h2>
             {% set gear_order = {
-                'left' : [
-                    'head',
-                    'neck',
-                    'shoulder',
-                    'back',
-                    'chest',
-                    'wrist',
-                ],
-                'right' : [
-                    'hands',
-                    'waist',
-                    'legs',
-                    'feet',
-                    'finger1',
-                    'finger2',
-                    'trinket1',
-                    'trinket2',
-                ],
-                'bottom' : [
-                    'mainHand',
-                    'offHand'
-                ]
-            }
-            %}
+                'left' : ['head','neck','shoulder','back','chest','wrist',],
+                'right' : ['hands','waist','legs','feet','finger1','finger2','trinket1','trinket2',],
+                'bottom' : ['mainHand','offHand']
+            } %}
 
 
             <div class="stuff">
@@ -96,12 +76,12 @@
                 {% for key, value in profile.stats %}
                     {% if key == "powerType" %}
                         <div class="stat">
-                            <p><span>{{ profile.stats.powerType | capitalize }}</span> : {{ profile.stats.power }} </p>
+                            <p><span>{{ profile.stats.powerType|capitalize }}</span> : {{ profile.stats.power }} </p>
                         </div>
                     {% else %}
                         {% if statProperties[key] is defined %}
                             <div class="stat">
-                                <p><span>{{ statProperties[key] | capitalize }}</span> : {{ value | round }} </p>
+                                <p><span>{{ statProperties[key]|capitalize }}</span> : {{ value | round }} </p>
                             </div>
                         {% endif %}
                     {% endif %}
