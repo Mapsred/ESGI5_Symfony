@@ -185,7 +185,7 @@ class BattleNetSDK
      */
     private function getAccessToken()
     {
-        if (!$this->session->has('access_token') || $this->session->has('access_token')['expires_at'] >= new \DateTime()) {
+        if (!$this->session->has('access_token') || $this->session->has('access_token')['expires_at'] <= new \DateTime()) {
             return $this->generateAccessToken();
         }
 
