@@ -9,7 +9,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * @ORM\Table(name="objectives")
- * @ORM\Entity(repositoryClass="App\Repository\ObjectiveRepository")
+ * @ORM\Entity()
  */
 class Objective
 {
@@ -26,7 +26,7 @@ class Objective
 
     /**
      * @var int $bnet_id
-     * @ORM\Column(name="bnet_id", type="integer")
+         * @ORM\Column(name="bnet_id", type="integer")
      */
     private $bnet_id;
 
@@ -47,6 +47,18 @@ class Objective
      * @ORM\Column(name="achievement_id", type="integer")
      */
     private $achievement_id;
+
+    /**
+     * @var string $username
+     * @ORM\Column(name="username", type="string")
+     */
+    private $username;
+
+    /**
+     * @var string $realm
+     * @ORM\Column(name="realm", type="string")
+     */
+    private $realm;
 
 
     /**
@@ -140,6 +152,44 @@ class Objective
     public function setAchievementId(int $achievement_id): self
     {
         $this->achievement_id = $achievement_id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     * @return Objective
+     */
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRealm(): string
+    {
+        return $this->realm;
+    }
+
+    /**
+     * @param string $realm
+     * @return Objective
+     */
+    public function setRealm(string $realm): self
+    {
+        $this->realm = $realm;
 
         return $this;
     }
