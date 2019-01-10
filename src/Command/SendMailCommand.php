@@ -37,12 +37,12 @@ class SendMailCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $message = (new \Swift_Message('Achievment mail'))
+        $message = (new \Swift_Message('Achievement mail'))
             ->setFrom('esgi5@wowesgi.com')
             ->setTo('maxime.marquet1@gmail.com')
             ->setBody(
                 $this->environment->render(
-                    'emails/achievment.html.twig',
+                    'emails/achievement.html.twig',
                     array('' => '')
                 ),
                 'text/html'
