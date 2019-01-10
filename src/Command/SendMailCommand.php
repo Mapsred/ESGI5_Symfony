@@ -39,7 +39,7 @@ class SendMailCommand extends Command
     {
         $message = (new \Swift_Message('Achievement mail'))
             ->setFrom('esgi5@wowesgi.com')
-            ->setTo('maxime.marquet1@gmail.com')
+            ->setTo('')
             ->setBody(
                 $this->environment->render(
                     'emails/achievement.html.twig',
