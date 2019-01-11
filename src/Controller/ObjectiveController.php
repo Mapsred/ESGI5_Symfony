@@ -19,9 +19,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class ObjectiveController extends AbstractController
 {
 
+    /**
+     * @var ObjectiveRepository $objectiveRepository
+     */
     private $objectiveRepository;
+
+    /**
+     * @var SessionInterface $session
+     */
     private $session;
 
+    /**
+     * ObjectiveController constructor.
+     * @param ObjectiveRepository $objectiveRepository
+     * @param SessionInterface $session
+     */
     public function __construct(ObjectiveRepository $objectiveRepository, SessionInterface $session)
     {
         $this->objectiveRepository = $objectiveRepository;

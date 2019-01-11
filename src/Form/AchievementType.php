@@ -12,6 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AchievementType extends AbstractType
 {
+    /**
+     * @var BattleNetSDK $battleNetSDK
+     */
     private $battleNetSDK;
 
     /**

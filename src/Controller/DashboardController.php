@@ -15,8 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DashboardController extends AbstractController
 {
+
+    /**
+     * @var SessionInterface $session
+     */
     private $session;
 
+    /**
+     * @param SessionInterface $session
+     */
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
@@ -28,7 +35,7 @@ class DashboardController extends AbstractController
      * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
-    public function index(Request $request, BattleNetHelper $battleNetHelper)
+    public function index(Request $request, BattleNetHelper $battleNetHelper): Response
     {
         $form = $this->createForm(RealmPlayerType::class);
 
@@ -66,7 +73,7 @@ class DashboardController extends AbstractController
      * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
-    public function stats(Request $request, BattleNetHelper $battleNetHelper)
+    public function stats(Request $request, BattleNetHelper $battleNetHelper): Response
     {
         $character = $this->session->get('character');
         if (!$character) {

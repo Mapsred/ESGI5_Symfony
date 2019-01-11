@@ -1,21 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig;
 
 use App\Utils\BattleNetSDK;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AchievementExtension extends AbstractExtension
 {
     /**
-     *
+     * @var string $battleNetSDK
      */
     private $battleNetSDK;
 
     /**
-     * AchievementExtension constructor.
      * @param BattleNetSDK $battleNetSDK
      */
     public function __construct(BattleNetSDK $battleNetSDK)
@@ -23,6 +23,9 @@ class AchievementExtension extends AbstractExtension
         $this->battleNetSDK = $battleNetSDK;
     }
 
+    /**
+     * @return array
+     */
     public function getFunctions(): array
     {
         return [
@@ -30,7 +33,11 @@ class AchievementExtension extends AbstractExtension
         ];
     }
 
-    public function achievement_label($id)
+    /**
+     * @param string $id
+     * @return string
+     */
+    public function achievement_label(string $id): string
     {
         $achievement = $this->battleNetSDK->getAchievement($id);
 

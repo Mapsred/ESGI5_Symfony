@@ -26,7 +26,7 @@ class Objective
 
     /**
      * @var int $bnet_id
-         * @ORM\Column(name="bnet_id", type="integer")
+     * @ORM\Column(name="bnet_id", type="integer")
      */
     private $bnet_id;
 
