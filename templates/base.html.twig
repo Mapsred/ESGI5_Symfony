@@ -37,12 +37,27 @@
                     <li class="nav-item {{ currentPath == "index" ? "active" : "" }}">
                         <a class="nav-link" href="{{ path('index') }}">Home</a>
                     </li>
+                    <li class="nav-item {{ currentPath == "dashboard_stats" ? "active" : "" }}">
+                        <a class="nav-link" href="{{ path('dashboard_stats') }}">Stats</a>
+                    </li>
                     <li class="nav-item {{ currentPath == "objectives" ? "active" : "" }}">
                         <a class="nav-link" href="{{ path('objectives_index') }}">Objectives</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav px-3">
                     {% if app.user %}
+                        <li class="nav-item text-nowrap">
+                            {% if app.session.get('character') %}
+                                <a class="nav-link" href="{{ path('dashboard_index') }}">
+                                    {{ app.session.get('character')['name'] ?? '' }} -
+                                    {{ app.session.get('character')['realm'] ?? '' }}, not you?
+                                </a>
+                            {% else %}
+                                <a class="nav-link" href="{{ path('dashboard_index') }}">
+                                    No character selected
+                                </a>
+                            {% endif %}
+                        </li>
                         <li class="nav-item text-nowrap">
                             <a class="nav-link" href="{{ path('logout') }}">Sign out</a>
                         </li>
@@ -61,6 +76,15 @@
     {% block body %}
         <div class="section">
             <div class="container">
+                {% for label, messages in app.session.flashbag.all %}
+                    <div class="text-center">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                    <hr>
+                {% endfor %}
+
                 {% block subbody %}{% endblock %}
             </div>
         </div>

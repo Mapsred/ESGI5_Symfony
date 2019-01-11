@@ -5,22 +5,27 @@ namespace App\Controller;
 use App\Entity\Objective;
 use App\Form\ObjectiveType;
 use App\Repository\ObjectiveRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/objectives")
+ * @Security("is_granted('ROLE_USER')")
  */
 class ObjectiveController extends AbstractController
 {
 
     private $objectiveRepository;
+    private $session;
 
-    public function __construct(ObjectiveRepository $objectiveRepository)
+    public function __construct(ObjectiveRepository $objectiveRepository, SessionInterface $session)
     {
         $this->objectiveRepository = $objectiveRepository;
+        $this->session = $session;
     }
 
     /**
@@ -44,8 +49,13 @@ class ObjectiveController extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $username = 'Zeng';
-        $realm = 'Hyjal';
+        $character = $this->session->get('character');
+        if (!$character) {
+            return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
+        }
+
+        $username = $character['name'];
+        $realm = $character['realm'];
 
         $form = $this->createForm(ObjectiveType::class, null, ['username' => $username, 'realm' => $realm]);
         $form->handleRequest($request);

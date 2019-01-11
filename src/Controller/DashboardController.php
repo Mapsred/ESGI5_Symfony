@@ -7,6 +7,7 @@ use App\Utils\BattleNetHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -14,12 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DashboardController extends AbstractController
 {
+    private $session;
+
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * @Route("/", name="dashboard_index")
      * @param Request $request
+     * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request, BattleNetHelper $battleNetHelper)
     {
         $form = $this->createForm(RealmPlayerType::class);
 
@@ -27,9 +36,23 @@ class DashboardController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            return $this->redirectToRoute('dashboard_stats', [
-                    'user' => implode('-', [$data['realm'], $data['character_name']])]
-            );
+            if (null === $profile = $battleNetHelper->findCharacter($data['character_name'], $data['realm'])) {
+                $this->addFlash('error',
+                    sprintf('The player %s for realm %s does not exists', $data['character_name'], $data['realm']));
+
+                return $this->redirectToRoute('dashboard_index');
+            }
+
+            $this->session->set('character', [
+                'realm' => $data['realm'],
+                'name' => $data['character_name'],
+            ]);
+
+            if ($request->query->get('redirect')) {
+                return $this->redirect($request->query->get('redirect'));
+            }
+
+            return $this->redirectToRoute('dashboard_stats');
         }
 
         return $this->render('dashboard/index.html.twig', [
@@ -45,17 +68,15 @@ class DashboardController extends AbstractController
      */
     public function stats(Request $request, BattleNetHelper $battleNetHelper)
     {
-        if (!$request->query->has('user')) {
-            return $this->redirectToRoute('dashboard_index');
+        $character = $this->session->get('character');
+        if (!$character) {
+            return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
         }
 
-        list($realm, $player) = explode('-', $request->query->get('user'));
+        $player = $character['name'];
+        $realm = $character['realm'];
 
-        if (null === $profile = $battleNetHelper->findCharacter($player, $realm)) {
-            $this->addFlash('error', sprintf('The player %s for realm %s does not exists', $player, $realm));
-
-            return $this->redirectToRoute('dashboard_index');
-        }
+        $profile = $battleNetHelper->findCharacter($player, $realm);
 
         if (null === $items = $battleNetHelper->findCharacterItems($player,$realm)){
             $this->addFlash('error', sprintf('The player %s for realm %s does not exists', $player, $realm));
