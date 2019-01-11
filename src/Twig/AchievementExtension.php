@@ -11,7 +11,7 @@ use Twig\TwigFunction;
 class AchievementExtension extends AbstractExtension
 {
     /**
-     * @var string $battleNetSDK
+     * @var BattleNetSDK $battleNetSDK
      */
     private $battleNetSDK;
 

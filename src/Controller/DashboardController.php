@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Exception\CharacterMissingException;
 use App\Form\RealmPlayerType;
 use App\Utils\BattleNetHelper;
+use App\Utils\CharacterHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +22,19 @@ class DashboardController extends AbstractController
      * @var SessionInterface $session
      */
     private $session;
+    /**
+     * @var CharacterHelper $characterHelper
+     */
+    private $characterHelper;
 
     /**
      * @param SessionInterface $session
+     * @param CharacterHelper $characterHelper
      */
-    public function __construct(SessionInterface $session)
+    public function __construct(SessionInterface $session, CharacterHelper $characterHelper)
     {
         $this->session = $session;
+        $this->characterHelper = $characterHelper;
     }
 
     /**
@@ -75,27 +83,20 @@ class DashboardController extends AbstractController
      */
     public function stats(Request $request, BattleNetHelper $battleNetHelper): Response
     {
-        $character = $this->session->get('character');
-        if (!$character) {
+        try {
+            list('realm' => $realm, 'name' => $username) = $this->characterHelper->getCurrent();
+        } catch (CharacterMissingException $exception) {
             return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
         }
 
-        $player = $character['name'];
-        $realm = $character['realm'];
-
-        $profile = $battleNetHelper->findCharacter($player, $realm);
-
-        if (null === $items = $battleNetHelper->findCharacterItems($player,$realm)){
-            $this->addFlash('error', sprintf('The player %s for realm %s does not exists', $player, $realm));
-
-            return $this->redirectToRoute('dashboard_index');
-        }
+        $profile = $battleNetHelper->findCharacter($username, $realm);
+        $items = $battleNetHelper->findCharacterItems($username, $realm);
 
         return $this->render('dashboard/stats.html.twig', [
             'realm' => $battleNetHelper->getBattleNetSDK()->getRealm($realm),
-            'player' => $player,
+            'player' => $username,
             'profile' => $profile,
-            'items' => $items
+            'items' => $items,
         ]);
     }
 }

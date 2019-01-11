@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Objective;
+use App\Exception\CharacterMissingException;
 use App\Form\ObjectiveType;
 use App\Repository\ObjectiveRepository;
+use App\Utils\CharacterHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,21 +24,20 @@ class ObjectiveController extends AbstractController
      * @var ObjectiveRepository $objectiveRepository
      */
     private $objectiveRepository;
-
     /**
-     * @var SessionInterface $session
+     * @var CharacterHelper $characterHelper
      */
-    private $session;
+    private $characterHelper;
 
     /**
      * ObjectiveController constructor.
      * @param ObjectiveRepository $objectiveRepository
-     * @param SessionInterface $session
+     * @param CharacterHelper $characterHelper
      */
-    public function __construct(ObjectiveRepository $objectiveRepository, SessionInterface $session)
+    public function __construct(ObjectiveRepository $objectiveRepository, CharacterHelper $characterHelper)
     {
         $this->objectiveRepository = $objectiveRepository;
-        $this->session = $session;
+        $this->characterHelper = $characterHelper;
     }
 
     /**
@@ -61,13 +61,11 @@ class ObjectiveController extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $character = $this->session->get('character');
-        if (!$character) {
+        try {
+            list('realm' => $realm, 'name' => $username) = $this->characterHelper->getCurrent();
+        } catch (CharacterMissingException $exception) {
             return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
         }
-
-        $username = $character['name'];
-        $realm = $character['realm'];
 
         $form = $this->createForm(ObjectiveType::class, null, ['username' => $username, 'realm' => $realm]);
         $form->handleRequest($request);
