@@ -37,12 +37,14 @@
                     <li class="nav-item {{ currentPath == "index" ? "active" : "" }}">
                         <a class="nav-link" href="{{ path('index') }}">Home</a>
                     </li>
-                    <li class="nav-item {{ currentPath == "dashboard_stats" ? "active" : "" }}">
-                        <a class="nav-link" href="{{ path('dashboard_stats') }}">Stats</a>
-                    </li>
-                    <li class="nav-item {{ currentPath == "objectives" ? "active" : "" }}">
-                        <a class="nav-link" href="{{ path('objectives_index') }}">Objectives</a>
-                    </li>
+                    {% if app.user %}
+                        <li class="nav-item {{ currentPath == "dashboard_stats" ? "active" : "" }}">
+                            <a class="nav-link" href="{{ path('dashboard_stats') }}">Stats</a>
+                        </li>
+                        <li class="nav-item {{ currentPath == "objectives" ? "active" : "" }}">
+                            <a class="nav-link" href="{{ path('objectives_index') }}">Objectives</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav px-3">
                     {% if app.user %}

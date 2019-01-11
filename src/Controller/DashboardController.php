@@ -6,6 +6,7 @@ use App\Exception\CharacterMissingException;
 use App\Form\RealmPlayerType;
 use App\Utils\BattleNetHelper;
 use App\Utils\CharacterHelper;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/dashboard")
+ * @Security("is_granted('ROLE_USER')")
  */
 class DashboardController extends AbstractController
 {

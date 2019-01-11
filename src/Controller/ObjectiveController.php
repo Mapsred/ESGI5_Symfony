@@ -30,7 +30,6 @@ class ObjectiveController extends AbstractController
     private $characterHelper;
 
     /**
-     * ObjectiveController constructor.
      * @param ObjectiveRepository $objectiveRepository
      * @param CharacterHelper $characterHelper
      */
