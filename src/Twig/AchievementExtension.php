@@ -23,13 +23,6 @@ class AchievementExtension extends AbstractExtension
         $this->battleNetSDK = $battleNetSDK;
     }
 
-    public function getFilters(): array
-    {
-        return [
-            new TwigFilter('filter_name', [$this, 'achievement_label'], ['is_safe' => ['html']]),
-        ];
-    }
-
     public function getFunctions(): array
     {
         return [
