@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Configuration\CharacterRequired;
 use App\Entity\Objective;
 use App\Exception\CharacterMissingException;
 use App\Form\ObjectiveType;
@@ -54,17 +55,14 @@ class ObjectiveController extends AbstractController
 
     /**
      * @Route("/create", name="objectives_create")
+     * @CharacterRequired()
      *
      * @param Request $request
      * @return Response
      */
     public function create(Request $request): Response
     {
-        try {
-            list('realm' => $realm, 'name' => $username) = $this->characterHelper->getCurrent();
-        } catch (CharacterMissingException $exception) {
-            return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
-        }
+        list('realm' => $realm, 'name' => $username) = $request->attributes->get('_character');
 
         $form = $this->createForm(ObjectiveType::class, null, ['username' => $username, 'realm' => $realm]);
         $form->handleRequest($request);

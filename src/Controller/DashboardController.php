@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Configuration\CharacterRequired;
 use App\Exception\CharacterMissingException;
 use App\Form\RealmPlayerType;
 use App\Utils\BattleNetHelper;
@@ -79,18 +80,14 @@ class DashboardController extends AbstractController
 
     /**
      * @Route("/stats", name="dashboard_stats")
+     * @CharacterRequired()
      * @param Request $request
      * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
     public function stats(Request $request, BattleNetHelper $battleNetHelper): Response
     {
-        try {
-            list('realm' => $realm, 'name' => $username) = $this->characterHelper->getCurrent();
-        } catch (CharacterMissingException $exception) {
-            return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
-        }
-
+        list('realm' => $realm, 'name' => $username) = $request->attributes->get('_character');
         $profile = $battleNetHelper->findCharacter($username, $realm);
         $items = $battleNetHelper->findCharacterItems($username, $realm);
 
