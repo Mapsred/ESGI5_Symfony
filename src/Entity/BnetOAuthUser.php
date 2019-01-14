@@ -54,6 +54,16 @@ class BnetOAuthUser implements UserInterface
     private $bnet_access_token;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $mail_enabled = true;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -180,5 +190,29 @@ class BnetOAuthUser implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function isMailEnabled(): ?bool
+    {
+        return $this->mail_enabled;
+    }
+
+    public function setMailEnabled(bool $mail_enabled): self
+    {
+        $this->mail_enabled = $mail_enabled;
+
+        return $this;
     }
 }
