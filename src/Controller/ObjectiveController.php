@@ -42,6 +42,8 @@ class ObjectiveController extends AbstractController
 
     /**
      * @Route("/", name="objectives_index")
+     * @CharacterRequired()
+     *
      * @return Response
      */
     public function index(): Response
@@ -70,9 +72,11 @@ class ObjectiveController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Objective $objective */
             $objective = $form->getData();
-            $objective->setBnetId($this->getUser()->getBnetId());
-            $objective->setUsername($username);
-            $objective->setRealm($realm);
+            $objective
+                ->setBnetId($this->getUser()->getBnetId())
+                ->setBnetOauthUser($this->getUser())
+                ->setUsername($username)
+                ->setRealm($realm);
 
             $this->objectiveRepository->save($objective);
 
