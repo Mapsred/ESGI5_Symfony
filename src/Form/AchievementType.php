@@ -39,13 +39,21 @@ class AchievementType extends AbstractType
 
             $completed = array_flip($character['achievements']['achievementsCompleted'] ?? []);
             $achievements = $this->battleNetSDK->getAchievements($character['faction']);
+            $categories = array_combine(array_keys($achievements), array_column($achievements, 'category'));
+            $achievements = array_combine(array_keys($achievements), array_column($achievements, 'title'));
 
             $remaining = array_diff_key($achievements, $completed);
             $remaining = array_flip($remaining);
 
-            ksort($remaining);
+            $data = [];
+            foreach ($remaining as $key => $item) {
+                $data[$categories[$item]][$key] = $item;
+            }
 
-            return $remaining;
+            ksort($remaining);
+            array_map('ksort', $data);
+
+            return $data;
         };
 
         $resolver->setDefault('choices', $choices);

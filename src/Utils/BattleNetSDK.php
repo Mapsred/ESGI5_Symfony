@@ -42,7 +42,8 @@ class BattleNetSDK
         CacheItemPoolInterface $cacheManager,
         Client $client,
         SessionInterface $session
-    ) {
+    )
+    {
         $this->client = $client;
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
@@ -143,8 +144,6 @@ class BattleNetSDK
 
             $output = [];
             foreach ($content as $item) {
-                $output[$item['id']] = $item['name'];
-
                 $achievements = $item['achievements'] ?? [];
 
                 $categogiesAchievements = array_column($item['categories'] ?? [], 'achievements');
@@ -158,12 +157,15 @@ class BattleNetSDK
                         continue;
                     }
 
-                    $output[$achievement['id']] = $achievement['title'];
+                    $output[$achievement['id']] = [
+                        'title' => $achievement['title'],
+                        'category' => $item['name']
+                    ];
                 }
             };
 
             return $output;
-        }, 'achievements', self::LONG_TIME);
+        }, 'achievements', self::SHORT_TIME);
     }
 
     /**

@@ -25,7 +25,10 @@ class ObjectiveType extends AbstractType
             ->add('achievement_id', AchievementType::class, [
                 'label' => 'Achievement',
                 'username' => $options['username'],
-                'realm' => $options['realm']
+                'realm' => $options['realm'],
+                'attr' => [
+                    'class' => 'select2'
+                ]
             ]);
     }
 
