@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: fma
- * Date: 14/01/19
- * Time: 13:46
- */
 
 namespace App\Utils;
-
 
 use App\Entity\Objective;
 use App\Repository\ObjectiveRepository;
