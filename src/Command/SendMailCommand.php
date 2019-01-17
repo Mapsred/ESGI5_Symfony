@@ -12,9 +12,7 @@ class SendMailCommand extends Command
 {
     protected static $defaultName = 'app:send-mail';
 
-    /**
-     * @var MailManager
-     */
+    /** @var MailManager $mailManager */
     private $mailManager;
 
     /**
@@ -28,7 +26,7 @@ class SendMailCommand extends Command
         $this->mailManager = $mailManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Sending mail')
@@ -41,7 +39,7 @@ class SendMailCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         if ($input->getOption('end')) {
             $this->mailManager->sendObjective();

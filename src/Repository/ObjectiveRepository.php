@@ -35,7 +35,7 @@ class ObjectiveRepository
      *
      * @return QueryBuilder
      */
-    public function createQueryBuilder($alias, $indexBy = null)
+    public function createQueryBuilder($alias, $indexBy = null): QueryBuilder
     {
         return $this->entityManager->createQueryBuilder()
             ->select($alias)
@@ -55,7 +55,7 @@ class ObjectiveRepository
      * @param \DateTime|null $date
      * @return Objective[]
      */
-    public function findByMailNotSent(\DateTime $date = null)
+    public function findByMailNotSent(\DateTime $date = null): array 
     {
         $qb = $this->createQueryBuilder('q')
             ->leftJoin('q.bnet_oauth_user', 'bnet_oauth_user');

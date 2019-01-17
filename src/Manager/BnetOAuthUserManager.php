@@ -4,7 +4,7 @@ namespace App\Manager;
 
 use App\Entity\BnetOAuthUser;
 use App\Repository\BnetOauthUserRepository;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 /**
@@ -19,9 +19,9 @@ class BnetOAuthUserManager extends BaseManager
 {
     /**
      * BnetOAuthUserManager constructor.
-     * @param ObjectManager $manager
+     * @param EntityManagerInterface $manager
      */
-    public function __construct(ObjectManager $manager)
+    public function __construct(EntityManagerInterface $manager)
     {
         parent::__construct($manager, BnetOAuthUser::class);
     }
@@ -30,7 +30,7 @@ class BnetOAuthUserManager extends BaseManager
      * @param UserResponseInterface $response
      * @return BnetOAuthUser|null|object
      */
-    public function findOrCreateUser(UserResponseInterface $response)
+    public function findOrCreateUser(UserResponseInterface $response): BnetOAuthUser
     {
         if (null === $bnetOAuthUser = $this->getRepository()->findOneByBnetId($response->getUsername())) {
             $bnetOAuthUser = $this->generateBnetOauthUser($response);
@@ -43,7 +43,7 @@ class BnetOAuthUserManager extends BaseManager
      * @param UserResponseInterface $response
      * @return BnetOAuthUser
      */
-    public function generateBnetOauthUser(UserResponseInterface $response)
+    public function generateBnetOauthUser(UserResponseInterface $response): BnetOAuthUser
     {
         return $this->updateFromUserResponse($this->newClass(), $response);
     }
@@ -53,7 +53,7 @@ class BnetOAuthUserManager extends BaseManager
      * @param UserResponseInterface $response
      * @return BnetOAuthUser
      */
-    public function updateFromUserResponse(BnetOAuthUser $user, UserResponseInterface $response)
+    public function updateFromUserResponse(BnetOAuthUser $user, UserResponseInterface $response): BnetOAuthUser
     {
         $data = $response->getData();
 

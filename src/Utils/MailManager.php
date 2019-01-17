@@ -41,7 +41,7 @@ class MailManager
     /**
      * @param string|null $time
      */
-    public function sendObjective(string $time = null)
+    public function sendObjective(string $time = null): void
     {
         $date = null;
         if (null !== $time) {
@@ -59,7 +59,7 @@ class MailManager
      * @param Objective $objective
      * @param string $time
      */
-    public function sendObjectiveMail(Objective $objective, string $time = null)
+    public function sendObjectiveMail(Objective $objective, string $time = null): void
     {
         $title = '[WowCollection] - Objective %s';
         $title = null === $time ? sprintf($title, 'ended') : sprintf($title, 'reminder');

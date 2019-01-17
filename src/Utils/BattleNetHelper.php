@@ -29,7 +29,7 @@ class BattleNetHelper
     /**
      * @return array
      */
-    public function getRealms()
+    public function getRealms(): array
     {
         $content = $this->getBattleNetSDK()->getRealms();
         $realms = $content['realms'];
@@ -43,11 +43,11 @@ class BattleNetHelper
      * @param bool $format
      * @return array|null
      */
-    public function findCharacter(string $player, string $realm, bool $format = true)
+    public function findCharacter(string $player, string $realm, bool $format = true): array
     {
         try {
             $contents = $this->getBattleNetSDK()->getCharacter($player, $realm);
-            $stats = $this->getBattleNetSDK()->getCharacter($player, $realm,'stats');
+            $stats = $this->getBattleNetSDK()->getCharacter($player, $realm, 'stats');
             $contents['stats'] = $stats['stats'];
 
             return $format ? $this->formatCharacter($contents) : $contents;
@@ -67,7 +67,8 @@ class BattleNetHelper
      * @param bool $format
      * @return array|null
      */
-    public function findCharacterItems(string $player, string $realm, bool $format = true){
+    public function findCharacterItems(string $player, string $realm, bool $format = true): array
+    {
         try {
             $contents = $this->getBattleNetSDK()->getCharacter($player, $realm, 'items');
 
@@ -86,21 +87,21 @@ class BattleNetHelper
      * @param array $character
      * @return array
      */
-    public function formatCharacter(array $character)
+    public function formatCharacter(array $character): array
     {
         $character['thumbnail'] = sprintf('http://render-eu.worldofwarcraft.com/character/%s', $character['thumbnail']);
-        $character['main_background'] = str_replace('-avatar','-main',$character['thumbnail']);
+        $character['main_background'] = str_replace('-avatar', '-main', $character['thumbnail']);
         $image = imagecreatefromjpeg($character['main_background']);
-        $image_size = (object) [
+        $image_size = (object)[
             'width' => imagesx($image),
             'height' => imagesy($image)
         ];
-        $rgb = imagecolorat($image,round($image_size->width/2), $image_size->height - 1);
+        $rgb = imagecolorat($image, round($image_size->width / 2), $image_size->height - 1);
         $r = ($rgb >> 16) & 0xFF;
         $g = ($rgb >> 8) & 0xFF;
         $b = $rgb & 0xFF;
 
-        $character['main_color'] = (object) ['r' => $r, 'g' => $g, 'b' => $b];
+        $character['main_color'] = (object)['r' => $r, 'g' => $g, 'b' => $b];
 
         $classes = $this->getBattleNetSDK()->getCharacterClasses();
         if (false !== $key = array_search($character['class'], array_column($classes['classes'], 'id'))) {
@@ -119,18 +120,19 @@ class BattleNetHelper
      * @param array $character
      * @return array
      */
-    public function formatCharacterItems(array $character)
+    public function formatCharacterItems(array $character): array
     {
 
-        foreach($character['items'] as $key => $item){
-            if(isset($item['icon'])){
+        foreach ($character['items'] as $key => $item) {
+            if (isset($item['icon'])) {
                 $character['items'][$key]['image'] = [
-                  'small' => sprintf('https://wow.zamimg.com/images/wow/icons/small/%s.jpg', $item['icon']),
-                  'medium' => sprintf('https://wow.zamimg.com/images/wow/icons/medium/%s.jpg', $item['icon']),
-                  'large' => sprintf('https://wow.zamimg.com/images/wow/icons/large/%s.jpg', $item['icon'])
+                    'small' => sprintf('https://wow.zamimg.com/images/wow/icons/small/%s.jpg', $item['icon']),
+                    'medium' => sprintf('https://wow.zamimg.com/images/wow/icons/medium/%s.jpg', $item['icon']),
+                    'large' => sprintf('https://wow.zamimg.com/images/wow/icons/large/%s.jpg', $item['icon'])
                 ];
             }
         }
+
         return $character;
     }
 }

@@ -85,7 +85,7 @@ class DashboardController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function profile(Request $request)
+    public function profile(Request $request): Response
     {
         $form = $this->createForm(UserEmailType::class);
 

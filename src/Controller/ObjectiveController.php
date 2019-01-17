@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Configuration\CharacterRequired;
 use App\Entity\Objective;
-use App\Exception\CharacterMissingException;
 use App\Form\ObjectiveType;
 use App\Repository\ObjectiveRepository;
 use App\Utils\CharacterHelper;
@@ -20,14 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ObjectiveController extends AbstractController
 {
-
-    /**
-     * @var ObjectiveRepository $objectiveRepository
-     */
+    /** @var ObjectiveRepository $objectiveRepository */
     private $objectiveRepository;
-    /**
-     * @var CharacterHelper $characterHelper
-     */
+
+    /** @var CharacterHelper $characterHelper */
     private $characterHelper;
 
     /**
