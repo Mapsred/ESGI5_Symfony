@@ -49,14 +49,4 @@ $(document).ready(function () {
             $('.datepicker').removeClass('open');
         });
     });
-
-    // $('.datepicker').datepicker({
-    //     format: "dd/mm/yyyy",
-    //     todayBtn: "linked",
-    //     language: "fr",
-    //     clearBtn: true,
-    //     autoclose: true,
-    //     todayHighlight: true
-    // })
-
 });
