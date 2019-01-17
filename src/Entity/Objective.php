@@ -60,6 +60,18 @@ class Objective
      */
     private $realm;
 
+    /**
+     * @var boolean $mail_sent
+     * @ORM\Column(type="boolean")
+     */
+    private $mail_sent = false;
+
+    /**
+     * @var BnetOAuthUser $bnet_oauth_user
+     * @ORM\ManyToOne(targetEntity="App\Entity\BnetOAuthUser", cascade={"persist"})
+     */
+    private $bnet_oauth_user;
+
 
     /**
      * @return int|null
@@ -190,6 +202,30 @@ class Objective
     public function setRealm(string $realm): self
     {
         $this->realm = $realm;
+
+        return $this;
+    }
+
+    public function isMailSent(): ?bool
+    {
+        return $this->mail_sent;
+    }
+
+    public function setMailSent(bool $mail_sent): self
+    {
+        $this->mail_sent = $mail_sent;
+
+        return $this;
+    }
+
+    public function getBnetOauthUser(): ?BnetOAuthUser
+    {
+        return $this->bnet_oauth_user;
+    }
+
+    public function setBnetOauthUser(?BnetOAuthUser $bnet_oauth_user): self
+    {
+        $this->bnet_oauth_user = $bnet_oauth_user;
 
         return $this;
     }

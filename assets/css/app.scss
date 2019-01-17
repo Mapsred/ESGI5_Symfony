@@ -128,3 +128,12 @@ body > .container {
 }
 
 
+.form-check-input {
+  margin-left: 0;
+}
+
+.form-check input[type="checkbox"] {
+  opacity: 1;
+  position: relative;
+  visibility: visible;
+}

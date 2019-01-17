@@ -53,7 +53,7 @@ class BattleNetSDK
     /**
      * @return array
      */
-    public function getRealms()
+    public function getRealms(): array
     {
         return $this->cacheHandle(function () {
             $response = $this->client->request('GET', '/data/wow/realm/', [
@@ -72,7 +72,7 @@ class BattleNetSDK
      * @param string $slug
      * @return array
      */
-    public function getRealm(string $slug)
+    public function getRealm(string $slug): array
     {
         return $this->cacheHandle(function () use ($slug) {
             $response = $this->client->request('GET', sprintf('/data/wow/realm/%s', $slug), [
@@ -93,7 +93,7 @@ class BattleNetSDK
      * @param string|null $fields
      * @return array
      */
-    public function getCharacter(string $name, string $realm, string $fields = null)
+    public function getCharacter(string $name, string $realm, string $fields = null): array
     {
         return $this->cacheHandle(function () use ($name, $realm, $fields) {
             $response = $this->client->request('GET', sprintf('/wow/character/%s/%s', $realm, $name), [
@@ -113,7 +113,7 @@ class BattleNetSDK
      * @param string $id
      * @return mixed
      */
-    public function getAchievement(string $id)
+    public function getAchievement(string $id): array
     {
         return $this->cacheHandle(function () use ($id) {
             $response = $this->client->request('GET', sprintf('/wow/achievement/%s', $id), [
@@ -143,8 +143,6 @@ class BattleNetSDK
 
             $output = [];
             foreach ($content as $item) {
-                $output[$item['id']] = $item['name'];
-
                 $achievements = $item['achievements'] ?? [];
 
                 $categogiesAchievements = array_column($item['categories'] ?? [], 'achievements');
@@ -158,18 +156,21 @@ class BattleNetSDK
                         continue;
                     }
 
-                    $output[$achievement['id']] = $achievement['title'];
+                    $output[$achievement['id']] = [
+                        'title' => $achievement['title'],
+                        'category' => $item['name']
+                    ];
                 }
             };
 
             return $output;
-        }, 'achievements', self::LONG_TIME);
+        }, 'achievements', self::SHORT_TIME);
     }
 
     /**
      * @return array
      */
-    public function getCharacterClasses()
+    public function getCharacterClasses(): array
     {
         return $this->cacheHandle(function () {
             $response = $this->client->request('GET', '/wow/data/character/classes', [
@@ -187,7 +188,7 @@ class BattleNetSDK
     /**
      * @return array
      */
-    public function getCharacterRaces()
+    public function getCharacterRaces(): array
     {
         return $this->cacheHandle(function () {
             $response = $this->client->request('GET', '/wow/data/character/races', [
@@ -205,7 +206,7 @@ class BattleNetSDK
     /**
      * @return string
      */
-    private function generateAccessToken()
+    private function generateAccessToken(): string
     {
         $response = $this->client->request("POST", "https://eu.battle.net/oauth/token", [
             'form_params' => ['grant_type' => 'client_credentials'],
@@ -225,7 +226,7 @@ class BattleNetSDK
     /**
      * @return string
      */
-    private function getAccessToken()
+    private function getAccessToken(): string
     {
         if (!$this->session->has('access_token') || $this->session->has('access_token')['expires_at'] <= new \DateTime()) {
             return $this->generateAccessToken();
@@ -238,7 +239,7 @@ class BattleNetSDK
      * @param ResponseInterface $response
      * @return array
      */
-    private function getJsonContent(ResponseInterface $response)
+    private function getJsonContent(ResponseInterface $response): array
     {
         $this->verifyStatus($response);
 
@@ -249,7 +250,7 @@ class BattleNetSDK
      * @param ResponseInterface $response
      * @param int $code
      */
-    private function verifyStatus(ResponseInterface $response, int $code = 200)
+    private function verifyStatus(ResponseInterface $response, int $code = 200): void
     {
         if ($response->getStatusCode() != $code) {
             throw new \Exception("Error");

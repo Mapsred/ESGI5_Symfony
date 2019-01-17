@@ -13,12 +13,13 @@
 
 {% block subbody %}
     <h1 class="h3 mb-3 font-weight-normal">Objectives</h1>
-    <a href="{{ path('objectives_create') }}" class="btn btn-primary">Create objective</a>
+    <a href="{{ path('objectives_create') }}" class="btn btn-primary">Create an objective</a>
 
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Username</th>
+            <th>Character</th>
+            <th>Title</th>
             <th>Achievement</th>
             <th>Date</th>
         </tr>
@@ -27,6 +28,7 @@
         {% for objective in objectives %}
             <tr>
                 <td>{{ objective.username }}</td>
+                <td>{{ objective.title }}</td>
                 <td>{{ achievement_label(objective.AchievementId) }}</td>
                 <td>{{ objective.endingDate|date("m/d/Y") }}</td>
             </tr>

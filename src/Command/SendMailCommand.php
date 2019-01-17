@@ -2,53 +2,49 @@
 
 namespace App\Command;
 
+use App\Utils\MailManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Twig\Environment;
 
 class SendMailCommand extends Command
 {
     protected static $defaultName = 'app:send-mail';
 
-    /**
-     * @var \Swift_Mailer
-     */
-    private $mailer;
+    /** @var MailManager $mailManager */
+    private $mailManager;
 
     /**
-     * @var Environment
+     * SendMailCommand constructor.
+     * @param MailManager $mailManager
+     * @param string|null $name
      */
-    private $environment;
-
-    public function __construct(\Swift_Mailer $mailer, Environment $environment)
+    public function __construct(MailManager $mailManager, string $name = null)
     {
-        parent::__construct();
-        $this->mailer = $mailer;
-        $this->environment = $environment;
+        parent::__construct($name);
+        $this->mailManager = $mailManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Sending mail')
+            ->addOption('end', null, InputOption::VALUE_NONE, 'Send emails for ended objectives.')
+            ->addOption('reminder', 'r', InputOption::VALUE_REQUIRED, 'Send emails for objectives with X days remaining.')
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $message = (new \Swift_Message('Achievement mail'))
-            ->setFrom('esgi5@wowesgi.com')
-            ->setTo('')
-            ->setBody(
-                $this->environment->render(
-                    'emails/achievement.html.twig',
-                    array('' => '')
-                ),
-                'text/html'
-            )
-        ;
-
-        $this->mailer->send($message);
+        if ($input->getOption('end')) {
+            $this->mailManager->sendObjective();
+        }elseif(null !== $reminder = $input->getOption('reminder')) {
+            $this->mailManager->sendObjective($reminder);
+        }
     }
 }

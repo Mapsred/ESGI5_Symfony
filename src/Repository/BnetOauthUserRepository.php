@@ -18,7 +18,7 @@ class BnetOauthUserRepository extends EntityRepository
      * @param $bnetId
      * @return BnetOAuthUser|null|object
      */
-    public function findOneByBnetId($bnetId)
+    public function findOneByBnetId($bnetId): BnetOAuthUser
     {
         return $this->findOneBy(['bnet_id' => $bnetId]);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Configuration\CharacterRequired;
 use App\Entity\Objective;
-use App\Exception\CharacterMissingException;
 use App\Form\ObjectiveType;
 use App\Repository\ObjectiveRepository;
 use App\Utils\CharacterHelper;
@@ -19,14 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ObjectiveController extends AbstractController
 {
-
-    /**
-     * @var ObjectiveRepository $objectiveRepository
-     */
+    /** @var ObjectiveRepository $objectiveRepository */
     private $objectiveRepository;
-    /**
-     * @var CharacterHelper $characterHelper
-     */
+
+    /** @var CharacterHelper $characterHelper */
     private $characterHelper;
 
     /**
@@ -41,6 +37,8 @@ class ObjectiveController extends AbstractController
 
     /**
      * @Route("/", name="objectives_index")
+     * @CharacterRequired()
+     *
      * @return Response
      */
     public function index(): Response
@@ -54,17 +52,14 @@ class ObjectiveController extends AbstractController
 
     /**
      * @Route("/create", name="objectives_create")
+     * @CharacterRequired()
      *
      * @param Request $request
      * @return Response
      */
     public function create(Request $request): Response
     {
-        try {
-            list('realm' => $realm, 'name' => $username) = $this->characterHelper->getCurrent();
-        } catch (CharacterMissingException $exception) {
-            return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
-        }
+        list('realm' => $realm, 'name' => $username) = $request->attributes->get('_character');
 
         $form = $this->createForm(ObjectiveType::class, null, ['username' => $username, 'realm' => $realm]);
         $form->handleRequest($request);
@@ -72,9 +67,11 @@ class ObjectiveController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Objective $objective */
             $objective = $form->getData();
-            $objective->setBnetId($this->getUser()->getBnetId());
-            $objective->setUsername($username);
-            $objective->setRealm($realm);
+            $objective
+                ->setBnetId($this->getUser()->getBnetId())
+                ->setBnetOauthUser($this->getUser())
+                ->setUsername($username)
+                ->setRealm($realm);
 
             $this->objectiveRepository->save($objective);
 

@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
-use App\Exception\CharacterMissingException;
+use App\Configuration\CharacterRequired;
+use App\Entity\BnetOAuthUser;
 use App\Form\RealmPlayerType;
+use App\Form\UserEmailType;
 use App\Utils\BattleNetHelper;
 use App\Utils\CharacterHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -16,10 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/dashboard")
  * @Security("is_granted('ROLE_USER')")
+ * @method BnetOAuthUser getUser()
  */
 class DashboardController extends AbstractController
 {
-
     /**
      * @var SessionInterface $session
      */
@@ -78,19 +81,43 @@ class DashboardController extends AbstractController
     }
 
     /**
+     * @Route("/profile", name="dashboard_profile")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function profile(Request $request): Response
+    {
+        $form = $this->createForm(UserEmailType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getUser()
+                ->setEmail($form->get('email')->getData())
+                ->setMailEnabled($form->get('mail_enabled')->getData());
+
+            $this->getDoctrine()->getManager()->persist($this->getUser());
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Informations updated');
+
+            return $this->redirectToRoute('dashboard_index');
+        }
+
+        return $this->render('dashboard/profile.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/stats", name="dashboard_stats")
+     * @CharacterRequired()
      * @param Request $request
      * @param BattleNetHelper $battleNetHelper
      * @return Response
      */
     public function stats(Request $request, BattleNetHelper $battleNetHelper): Response
     {
-        try {
-            list('realm' => $realm, 'name' => $username) = $this->characterHelper->getCurrent();
-        } catch (CharacterMissingException $exception) {
-            return $this->redirectToRoute('dashboard_index', ['redirect' => $request->getRequestUri()]);
-        }
-
+        list('realm' => $realm, 'name' => $username) = $request->attributes->get('_character');
         $profile = $battleNetHelper->findCharacter($username, $realm);
         $items = $battleNetHelper->findCharacterItems($username, $realm);
 
