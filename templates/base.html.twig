@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
-    <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+    {{ encore_entry_link_tags('app') }}
 
     <!--
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -19,7 +19,8 @@
 </head>
 <body class="sidebar-collapse">
 <header>
-    <nav class="navbar navbar-expand-lg bg-primary fixed-top navbar-transparent " color-on-scroll="400">
+    <nav class="navbar navbar-expand-lg bg-primary fixed-top {% block navbar_class %}navbar-transparent{% endblock %}"
+         color-on-scroll="400">
         <div class="container">
             <div class="navbar-translate">
                 <a class="navbar-brand" href="{{ path('index') }}">WoWCollection</a>
@@ -36,9 +37,32 @@
                     <li class="nav-item {{ currentPath == "index" ? "active" : "" }}">
                         <a class="nav-link" href="{{ path('index') }}">Home</a>
                     </li>
+                    {% if app.user %}
+                        <li class="nav-item {{ currentPath == "dashboard_stats" ? "active" : "" }}">
+                            <a class="nav-link" href="{{ path('dashboard_stats') }}">Stats</a>
+                        </li>
+                        <li class="nav-item {{ currentPath == "objectives" ? "active" : "" }}">
+                            <a class="nav-link" href="{{ path('objectives_index') }}">Objectives</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav px-3">
                     {% if app.user %}
+                        <li class="nav-item text-nowrap">
+                            {% if app.session.get('character') %}
+                                <a class="nav-link" href="{{ path('dashboard_index') }}">
+                                    {{ app.session.get('character')['name'] ?? '' }} -
+                                    {{ app.session.get('character')['realm'] ?? '' }}, not you?
+                                </a>
+                            {% else %}
+                                <a class="nav-link" href="{{ path('dashboard_index') }}">
+                                    No character selected
+                                </a>
+                            {% endif %}
+                        </li>
+                        <li class="nav-item text-nowrap">
+                            <a class="nav-link" href="{{ path('dashboard_profile') }}">Profile</a>
+                        </li>
                         <li class="nav-item text-nowrap">
                             <a class="nav-link" href="{{ path('logout') }}">Sign out</a>
                         </li>
@@ -57,6 +81,15 @@
     {% block body %}
         <div class="section">
             <div class="container">
+                {% for label, messages in app.session.flashbag.all %}
+                    <div class="text-center">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                    <hr>
+                {% endfor %}
+
                 {% block subbody %}{% endblock %}
             </div>
         </div>
@@ -64,6 +97,6 @@
 </div>
 
 {% block javascripts %}{% endblock %}
-<script src="{{ asset('build/app.js') }}"></script>
+{{ encore_entry_script_tags('app') }}
 </body>
 </html>

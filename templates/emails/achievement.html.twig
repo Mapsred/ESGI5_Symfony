@@ -1,0 +1,14 @@
+{% if time is not null %}
+    <h1>You objective has {{ time }} remaining days</h1>
+
+    <p>Your objective <i>{{ objective.title }}</i> added the {{ objective.createdAt|date }} will end on
+        the {{ objective.endingDate|date }}.</p>
+
+    <p>We hope that you manage to accomplish it in the time you defined !</p>
+{% else %}
+    <h1>You objective came to an end</h1>
+
+    <p>Your objective <i>{{ objective.title }}</i> added the {{ objective.createdAt|date }} just ended.</p>
+
+    <p>We hope that you managed to accomplish it in the time you defined !</p>
+{% endif %}

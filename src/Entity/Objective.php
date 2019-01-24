@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -7,7 +9,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * @ORM\Table(name="objectives")
- * @ORM\Entity(repositoryClass="App\Repository\ObjectiveRepository")
+ * @ORM\Entity()
  */
 class Objective
 {
@@ -45,6 +47,30 @@ class Objective
      * @ORM\Column(name="achievement_id", type="integer")
      */
     private $achievement_id;
+
+    /**
+     * @var string $username
+     * @ORM\Column(name="username", type="string")
+     */
+    private $username;
+
+    /**
+     * @var string $realm
+     * @ORM\Column(name="realm", type="string")
+     */
+    private $realm;
+
+    /**
+     * @var boolean $mail_sent
+     * @ORM\Column(type="boolean")
+     */
+    private $mail_sent = false;
+
+    /**
+     * @var BnetOAuthUser $bnet_oauth_user
+     * @ORM\ManyToOne(targetEntity="App\Entity\BnetOAuthUser", cascade={"persist"})
+     */
+    private $bnet_oauth_user;
 
 
     /**
@@ -138,6 +164,68 @@ class Objective
     public function setAchievementId(int $achievement_id): self
     {
         $this->achievement_id = $achievement_id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     * @return Objective
+     */
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRealm(): string
+    {
+        return $this->realm;
+    }
+
+    /**
+     * @param string $realm
+     * @return Objective
+     */
+    public function setRealm(string $realm): self
+    {
+        $this->realm = $realm;
+
+        return $this;
+    }
+
+    public function isMailSent(): ?bool
+    {
+        return $this->mail_sent;
+    }
+
+    public function setMailSent(bool $mail_sent): self
+    {
+        $this->mail_sent = $mail_sent;
+
+        return $this;
+    }
+
+    public function getBnetOauthUser(): ?BnetOAuthUser
+    {
+        return $this->bnet_oauth_user;
+    }
+
+    public function setBnetOauthUser(?BnetOAuthUser $bnet_oauth_user): self
+    {
+        $this->bnet_oauth_user = $bnet_oauth_user;
 
         return $this;
     }

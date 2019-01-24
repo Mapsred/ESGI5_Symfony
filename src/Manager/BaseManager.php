@@ -2,9 +2,8 @@
 
 namespace App\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -14,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 abstract class BaseManager
 {
     /**
-     * @var ObjectManager|EntityManager $manager
+     * @var EntityManagerInterface $manager
      */
     private $manager;
 
@@ -25,19 +24,19 @@ abstract class BaseManager
 
     /**
      * BaseManager constructor.
-     * @param ObjectManager $manager
+     * @param EntityManagerInterface $manager
      * @param string $class
      */
-    public function __construct(ObjectManager $manager, string $class)
+    public function __construct(EntityManagerInterface $manager, string $class)
     {
         $this->manager = $manager;
         $this->class = $class;
     }
 
     /**
-     * @return ObjectManager|EntityManager
+     * @return EntityManagerInterface
      */
-    public function getManager()
+    public function getManager(): EntityManagerInterface
     {
         return $this->manager;
     }
@@ -45,7 +44,7 @@ abstract class BaseManager
     /**
      * @return ObjectRepository|EntityRepository
      */
-    public function getRepository()
+    public function getRepository(): ObjectRepository
     {
         return $this->manager->getRepository($this->class);
     }
