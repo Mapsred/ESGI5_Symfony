@@ -31,9 +31,9 @@ body > .container {
     border-color: #68CCEF;
   }
 
-  .player-information {
+  /*.player-information {
     margin-left: 90px;
-  }
+  }*/
 
   .portrait.chevalier-de-la-mort {
     border-color: #C41E3B;
@@ -88,8 +88,17 @@ body > .container {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.44);
   }
 
-  .player-information {
+  /*.player-information {
     margin-left: 90px;
+  }*/
+
+  .character-name-block{
+    position: absolute;
+    top: 20px;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    padding: 0 20px;
   }
 
   .description {
@@ -101,9 +110,11 @@ body > .container {
     font-size: 20px;
     font-weight: normal;
     margin-bottom: 0px;
-    color: #d87e45;
+    //color: #d87e45;
+    color: #fff;
     padding-bottom: 6px;
-    border-bottom: 1px solid #6b4731;
+    //border-bottom: 1px solid #6b4731;
+    border-bottom: 1px solid #fff;
     margin-top: 15px;
   }
 
@@ -136,4 +147,8 @@ body > .container {
   opacity: 1;
   position: relative;
   visibility: visible;
+}
+
+.no-padding-bottom{
+  padding-bottom: 0 !important;
 }

@@ -1,7 +1,12 @@
 .player-information{
-
+  position: relative;
   .stuff{
     position: relative;
+    .background{
+      img{
+        width: 100%;
+      }
+    }
     .gears{
       display: inline-block;
       margin: 10px 0;

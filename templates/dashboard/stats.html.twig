@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-fluid.html.twig' %}
 
 {% block title %}{{ player }} informations{% endblock %}
 
@@ -13,13 +13,21 @@
 {% block subbody %}
 
     <div class="character-profile-results">
-        <img src="{{ profile.thumbnail }}" alt="{{ profile.name }}"
-             class="portrait {{ profile.class.name|slugify }}">
+
+
         <div class="player-information">
-            <h2>
-                <img class="class_icon" src="{{ asset('build/images/classes/%s.png'|format(profile.class.id)) }}">
-                {{ profile.name }} ({{ profile.race.name }} {{ profile.class.name }} {{ profile.level }}) - {{ profile.realm }}
-            </h2>
+            <div class="character-name-block">
+                <div class="avatar">
+                    <img src="{{ profile.thumbnail }}" alt="{{ profile.name }}"
+                         class="portrait {{ profile.class.name|slugify }}">
+                </div>
+                <div class="name">
+                    <h2>
+                        <img class="class_icon" src="{{ asset('build/images/classes/%s.png'|format(profile.class.id)) }}">
+                        {{ profile.name }} ({{ profile.race.name }} {{ profile.class.name }} {{ profile.level }}) - {{ profile.realm }}
+                    </h2>
+                </div>
+            </div>
             {% set gear_order = {
                 'left' : ['head','neck','shoulder','back','chest','wrist',],
                 'right' : ['hands','waist','legs','feet','finger1','finger2','trinket1','trinket2',],

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="section no-padding-bottom">
+        <div class="container-fluid">
+            <div class="row">
+                {% for label, messages in app.session.flashbag.all %}
+                    <div class="text-center">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                    <hr>
+                {% endfor %}
+
+                {% block subbody %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock body %}
