@@ -101,7 +101,7 @@ class BattleNetHelper
         $g = ($rgb >> 8) & 0xFF;
         $b = $rgb & 0xFF;
 
-        $character['main_color'] = (object)['r' => $r, 'g' => $g, 'b' => $b];
+        $character['main_color'] = ['r' => $r, 'g' => $g, 'b' => $b];
 
         $classes = $this->getBattleNetSDK()->getCharacterClasses();
         if (false !== $key = array_search($character['class'], array_column($classes['classes'], 'id'))) {
