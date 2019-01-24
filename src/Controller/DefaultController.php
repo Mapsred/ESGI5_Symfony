@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Utils\BattleNetSDK;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\BattlePet;
@@ -35,18 +33,4 @@ class DefaultController extends AbstractController
             'BattlePet' => $battlePet
         ]);
     }
-
-    /**
-     * @Route("/authorize", name="authorize")
-     * @param BattleNetSDK $battleNetSDK
-     * @return Response
-     */
-    public function authorize(BattleNetSDK $battleNetSDK)
-    {
-//        var_dump($battleNetSDK->getRealms());
-        var_dump($battleNetSDK->getRealm('hyjal'));
-
-        return new Response();
-    }
-
 }
