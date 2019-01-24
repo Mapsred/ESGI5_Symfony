@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}Homepage{% endblock %}
 
 
 {% block body %}
@@ -17,11 +17,10 @@
     <div>
         <h1>Hello ! </h1>
         <ul>
-            <li>Your controller at <code><a href="{{ 'src/Controller/DefaultController.php'|file_link(0) }}">src/Controller/DefaultController.php</a></code></li>
-            <li>Your template at <code><a href="{{ 'templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code></li>
-        </ul>
-        <ul>
-            <img src="http://media.blizzard.com/wow/icons/56/%7B%7B BattlePet.icon }}.jpg"> </img> {{ BattlePet.name }}
+            <li>{{ BattlePet.name }}</li>
+            <li>
+                <img src="http://media.blizzard.com/wow/icons/56/{{ BattlePet.icon }}.jpg" alt="{{ BattlePet.name }}"/>
+            </li>
             <li> Health : {{ BattlePet.health }}</li>
             <li> Power : {{ BattlePet.power }}</li>
             <li> Speed : {{ BattlePet.speed }}</li>
