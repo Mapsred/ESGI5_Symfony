@@ -18,7 +18,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/{id<\d+>?1}", name="index")
      * @param $id
-     * @return battlePet
+     * @return Response
      */
     public function index($id)
     {
