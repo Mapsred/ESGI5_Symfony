@@ -16,12 +16,12 @@ use App\Entity\BattlePet;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/{id<\d+>?1}", name="index")
+     * @param $id
+     * @return battlePet
      */
-    public function index()
+    public function index($id)
     {
-        $id = 1;
-
         $battlePet = $this->getDoctrine()->getRepository(BattlePet::class)->find($id);
 
         if (!$battlePet) {
